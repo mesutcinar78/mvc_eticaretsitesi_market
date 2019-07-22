@@ -1,0 +1,38 @@
+﻿@model IEnumerable<MVCeTicaret.Models.Product>
+@{
+    ViewBag.Title = "Product";
+}
+
+<div class="container">
+    <div class="row" style="margin-top:50px">
+
+        @{ 
+            foreach( var item in Model)
+            {
+                <div class="col-md-3 ">
+                    <div class="thumbnail" style=" border-radius:10px; border-width:1px;  ">
+                        <img  src="@Url.Content(item.ImageUrl)" alt="@Url.Content(item.AltText)" />
+                        <div class="caption">
+                            <h4 style="height:64px;">
+                                @*//buradaki height degistirebilirsin*@
+                                @Html.Raw(@item.Name)- @string.Format("{0:C2}",item.UnitPrice)
+                            </h4>
+
+                            <p style="height:140px; overflow:auto; font-size:small; text-align:justify;">
+                                @* heigt kismini degistirebilirsin *@
+                                @* yada overflow hidden da diyebilirsin asagiya tasma durumlarinda gizler *@
+                                @Html.Raw(@item.ShortDescription)
+                            </p>
+
+                            <p>
+                                @Html.ActionLink("Ürün Detayı","ProductDetail",new { id=item.ProductID},new { @class="btn btn-success form-control"})
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+

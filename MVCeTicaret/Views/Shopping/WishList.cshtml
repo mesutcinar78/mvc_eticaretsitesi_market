@@ -1,0 +1,83 @@
+﻿@model IEnumerable<MVCeTicaret.Models.WishList>
+@{
+    ViewBag.Title = "WishList";
+}
+
+<h2>İstek Listeniz</h2>
+
+<table class="table table-bordered" style="text-align:center">
+    <thead>
+        <tr>
+            <th>Listeden Çıkar</th>
+            <th>Ürün Görseli</th>
+            <th>Ürün Adı</th>
+            <th>Ürün Fiyatı</th>
+            <th>Stok Miktarı</th>
+            <th>Sepete Ekle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td style="line-height:150px;">
+
+                        <a href="@Url.Action("RemoveFromList","Shopping", new { id=item.WishListID})" style="font-size:17pt;">
+                            <span class="glyphicon glyphicon-trash" style="color:red;"></span>
+                        </a>
+                    </td>
+                    <td style="line-height:150px;">
+                        <img src="@Url.Content(item.Product.ImageUrl)" alt="@Url.Content(item.Product.AltText)" class="img-thumbnail" style="height:150px;" />
+                    </td>
+                    <td style="line-height:150px;">
+                        @item.Product.Name
+                        
+                    </td>
+                    <td style="line-height:150px;">
+                        @string.Format("{0:C2}", item.Product.UnitPrice)
+                    </td>
+                    <td style="line-height:150px;">
+                        @item.Product.UnitsInStock @item.Product.QuantityPerUnit
+                    </td>
+                    <td style="line-height:150px;">
+
+                        @{ 
+
+                            if(item.Product.UnitsInStock==0)
+                            {
+                                //stoğum yoksa tıklanamasin dediks
+                                <a disabled style="font-size:20pt;">
+                                    <span class="glyphicon glyphicon-shopping-cart" style="color:lightgray;"></span>
+                                </a>
+                                
+                            }
+                            else
+                            {
+                                <a href="@Url.Action("AddToCartFromWishlist", "Shopping", new { id=item.WishListID})"  style="font-size:20pt;">
+                                    <span class="glyphicon glyphicon-shopping-cart" style="color:darkgreen;"></span>
+                                </a>
+                                
+                            }
+                        }
+                        
+                        
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@{
+    if (Model.ToList().Count == 0)
+    {
+        <span class="lead">
+            İstek Listeniz boş...
+        </span>
+    }
+    
+}
+
+

@@ -1,0 +1,87 @@
+﻿@model IEnumerable<MVCeTicaret.Models.OrderDetail>
+@{
+    ViewBag.Title = "Cart";
+}
+
+<h2>Sepetiniz</h2>
+
+<table class="table table-bordered" style="text-align:center">
+    <thead>
+        <tr>
+            <th>Sepetten Çıkar</th>
+            <th>Ürün Görseli</th>
+            <th>Ürün Adı</th>
+            <th>Ürün Fiyatı</th>
+            <th>Ürün Miktarı</th>
+            <th>Miktar Güncelle</th>
+            <th>İstek Listesine Ekle</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            decimal toplamTutar = 0;
+            foreach (var item in Model)
+            {
+                toplamTutar += item.TotalAmount;
+                <tr>
+                    <td style="line-height:150px;">
+                       
+                        <a href="@Url.Action("RemoveFromCart","Shopping", new { id=item.OrderDetailID})" style="font-size:17pt;">
+                            <span class="glyphicon glyphicon-trash" style="color:red;"></span>
+                        </a>
+                    </td>
+                    <td style="line-height:150px;">
+                        <img src="@Url.Content(item.Product.ImageUrl)" alt="@Url.Content(item.Product.AltText)" class="img-thumbnail" style="height:150px;" />
+                    </td>
+                    <td style="line-height:150px;">
+                        @item.Product.Name
+                    </td>
+                    <td style="line-height:150px;">
+                        @string.Format("{0:C2}", item.UnitPrice)
+                    </td>
+                    <td style="line-height:150px;">
+                        @item.Quantity @item.Product.QuantityPerUnit
+                    </td>
+                    <td style="width:30px;">
+                        @using(Html.BeginForm("UpdateQuantity","Shopping",new { id=item.OrderDetailID},FormMethod.Post,new { @style= "margin-top:60px;"}))
+                        {
+                            <input  type="number" name="quantity" value="@item.Quantity" min="1" max="@item.Product.UnitsInStock"/>
+                            <button type="submit">
+                                <span class="glyphicon glyphicon-ok" style="color:green;"></span>
+                            </button>
+                        }
+                    </td>
+                    <td style="line-height:150px;">
+                        @* TODO: *@
+                        <a href="@Url.Action("AddToWishlistFromCart", "Shopping",new { id = item.OrderDetailID })" style="font-size:20pt;">
+                            <span class="glyphicon glyphicon-heart" style="color:cornflowerblue;"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<hr />
+
+@{
+    if (Model.ToList().Count == 0)
+    {
+        <span class="lead">
+            Sepetiniz boş...
+        </span>
+    }
+    else
+    {
+        <span>
+            <b>
+                Ödenmesi Gereken Toplam Tutar = @string.Format("{0:C2}", toplamTutar)
+            </b>
+        </span>
+
+       
+        @Html.ActionLink("Siparişi Tamamla", "GoToPayment", "Shopping", null, new { @class = "btn btn-success", @style = "float:right;" })
+    }
+}
+

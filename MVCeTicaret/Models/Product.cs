@@ -1,0 +1,96 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Web;
+
+namespace MVCeTicaret.Models
+{
+    public class Product
+    {
+        [Key]
+        public int ProductID { get; set; }
+
+        [Required,MaxLength(200)]
+        public string Name { get; set; }
+
+        [Required,ForeignKey("Supplier")]
+        public int SupplierID { get; set; }
+
+        [Required,ForeignKey("SubCategory")]
+        public int SubCategoryID { get; set; }
+
+        [Required,MaxLength(20)]
+        public string QuantityPerUnit { get; set; }
+
+        [Required,Column(TypeName ="money")]
+        public decimal UnitPrice { get; set; }
+
+        [Column(TypeName ="money")]
+        public decimal? OldPrice { get; set; }
+
+        [MaxLength(20)]
+        public string UnitWeight { get; set; }
+
+        [MaxLength(20)]
+        public string Size { get; set; }
+
+        
+        public decimal Discount { get; set; }
+
+        public int UnitsInStock { get; set; }
+
+        public int? UnitOnOrder { get; set; }
+
+        public bool?  ProductAvailable { get; set; }
+
+        [Required,MaxLength(500)]
+        public string ImageUrl { get; set; }
+
+        [Required,MaxLength(200)]
+        public string AltText { get; set; }
+
+        [Required,MaxLength(300)]
+        public string ShortDescription { get; set; }
+
+        [Required,MaxLength(2000)]
+        public string LongDescription { get; set; }
+
+        [MaxLength(500)]
+        public string Picture1 { get; set; }
+
+
+        [MaxLength(500)]
+        public string Picture2 { get; set; }
+
+
+        [MaxLength(500)]
+        public string Picture3 { get; set; }
+
+
+        [MaxLength(500)]
+        public string Picture4 { get; set; }
+
+        [MaxLength(250)]
+        public string Notes { get; set; }
+
+        public virtual SubCategory SubCategory { get; set; }//bir urunun bir alt kategorisi olur
+
+        public virtual Supplier Supplier { get; set; }//bir urunun bir tedarikcisi olur
+
+        //bir urunun siparis detayi birden fazla olur cunku bir urunden birden fazla satilabilir
+
+        public virtual ICollection<OrderDetail>OrderDetails { get; set; }
+
+        public virtual ICollection<RecentlyView>RecentlyViews { get; set; }
+
+        //bir urune ait birden fazla yorum vardir
+
+        public virtual ICollection<Review> Reviews { get; set; }
+
+        //bir urun birden fazla kisi tarafindan istek listelerine ekleyebilir.stoğumda kalmayabiir ama ekleyebilir.isteklistesine ekle her zaman aktif ama sepete ekle kismi yoksa elimizde ekleyemeyecek
+
+        public virtual ICollection<WishList> WishLists { get; set; }
+    }
+}
